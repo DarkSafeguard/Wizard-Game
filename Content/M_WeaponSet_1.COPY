@@ -1,0 +1,53 @@
+Begin Object Class=/Script/Engine.Material Name="M_WeaponSet_1"
+   Begin Object Class=/Script/UnrealEd.SceneThumbnailInfoWithPrimitive Name="SceneThumbnailInfoWithPrimitive_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_5"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_4"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_3"
+   End Object
+   Begin Object Name="SceneThumbnailInfoWithPrimitive_0"
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_5"
+      Texture=Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_OcclusionRoughnessMetallic.T_Weapon_Set1_OcclusionRoughnessMetallic"'
+      SamplerType=SAMPLERTYPE_LinearColor
+      MaterialExpressionEditorX=-448
+      MaterialExpressionEditorY=432
+      MaterialExpressionGuid=22676F6546435272FF2F748BB2D2F9D6
+      Material=Material'"M_WeaponSet_1"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_4"
+      Texture=Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_Normal.T_Weapon_Set1_Normal"'
+      SamplerType=SAMPLERTYPE_Normal
+      MaterialExpressionEditorX=-432
+      MaterialExpressionEditorY=224
+      MaterialExpressionGuid=3584EF704CDC6EA8AAE7738A6F97F90A
+      Material=Material'"M_WeaponSet_1"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_3"
+      Texture=Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_BaseColor.T_Weapon_Set1_BaseColor"'
+      MaterialExpressionEditorX=-416
+      MaterialExpressionEditorY=16
+      MaterialExpressionGuid=85261511488C5ACDC62F1687F70C9041
+      Material=Material'"M_WeaponSet_1"'
+   End Object
+   BaseColor=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_3"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+   Metallic=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_5"',OutputIndex=3,Mask=1,MaskB=1)
+   Roughness=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_5"',OutputIndex=2,Mask=1,MaskG=1)
+   Normal=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_4"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+   AmbientOcclusion=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_5"',OutputIndex=1,Mask=1,MaskR=1)
+   bUsedWithSkeletalMesh=True
+   bUsedWithStaticLighting=True
+   Expressions(0)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_3"'
+   Expressions(1)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_4"'
+   Expressions(2)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_5"'
+   bCanMaskedBeAssumedOpaque=True
+   StateId=2F3946C5421EB4B692EDA48D1A5D71A0
+   CachedExpressionData=(ReferencedTextures=(Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_BaseColor.T_Weapon_Set1_BaseColor"',Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_Normal.T_Weapon_Set1_Normal"',Texture2D'"/Game/Weapon_Pack/Textures/Weapons/T_Weapon_Set1_OcclusionRoughnessMetallic.T_Weapon_Set1_OcclusionRoughnessMetallic"'),QualityLevelsUsed=(False,False,False,False))
+   ReferencedTextureGuids(0)=50E22576461093AC8D9D9B97B275470C
+   ReferencedTextureGuids(1)=791B3D764CB28BA7A27F22BEA4FA927C
+   ReferencedTextureGuids(2)=AA647486422DADCF534930A94A7A5863
+   ThumbnailInfo=SceneThumbnailInfoWithPrimitive'"SceneThumbnailInfoWithPrimitive_0"'
+   LightingGuid=5C87CF534AF3372CD503BF83609EA024
+End Object
