@@ -7,15 +7,19 @@
 #include "Components/WidgetComponent.h"
 #include "Blaster/Public/Character/BlasterCharacter.h"
 
-
 AFlag::AFlag()
 {
+	bReplicates = true;
 	FlagMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FlagMesh"));
 	SetRootComponent(FlagMesh);
 	GetAreaSphere()->SetupAttachment(FlagMesh);
 	GetPickupWidget()->SetupAttachment(FlagMesh);
 	FlagMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	FlagMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PhysicsConstraint"));
+	PhysicsConstraint->SetupAttachment(RootComponent);
+
 }
 
 void AFlag::Dropped()
@@ -28,7 +32,7 @@ void AFlag::Dropped()
 	BlasterOwnerController = nullptr;
 }
 
-void AFlag::ResetFlag()
+void AFlag::ResetFlag() 
 {
 	ABlasterCharacter* FlagBearer = Cast<ABlasterCharacter>(GetOwner());
 	if (FlagBearer)
@@ -49,6 +53,12 @@ void AFlag::ResetFlag()
 	BlasterOwnerCharacter = nullptr;
 	BlasterOwnerController = nullptr;
 
+	//SetActorTransform(InitialTransform);
+	MulticastResetFlag();
+}
+
+void AFlag::MulticastResetFlag_Implementation()
+{
 	SetActorTransform(InitialTransform);
 }
 
@@ -78,6 +88,8 @@ void AFlag::OnDropped()
 	FlagMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	FlagMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
+	LockRotation();
+
 	FlagMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_BLUE);
 	FlagMesh->MarkRenderStateDirty();
 	EnableCustomDepth(true);
@@ -87,4 +99,18 @@ void AFlag::BeginPlay()
 {
 	Super::BeginPlay();
 	InitialTransform = GetActorTransform();
+}
+
+void AFlag::LockRotation()
+{
+	FlagMesh->SetWorldRotation(FRotator(0.f, 0.f, 0.f));
+	PhysicsConstraint->SetConstrainedComponents(FlagMesh, NAME_None, nullptr, NAME_None);
+
+	PhysicsConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
+	PhysicsConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
+	PhysicsConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.f);
+
+	PhysicsConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Free, 0.f);
+	PhysicsConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Free, 0.f);
+	PhysicsConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0.f);
 }

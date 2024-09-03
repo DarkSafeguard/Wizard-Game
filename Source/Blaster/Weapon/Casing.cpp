@@ -18,8 +18,6 @@ ACasing::ACasing()
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
 	CasingMesh->SetNotifyRigidBodyCollision(true);
-	ShellEjectionImpulse = 10.f;
-	ShellLifeSpan = 3.f;
 }
 
 // Called when the game starts or when spawned

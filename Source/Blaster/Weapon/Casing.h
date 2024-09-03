@@ -27,11 +27,11 @@ private:
 	UStaticMeshComponent* CasingMesh;
 
 	UPROPERTY(EditAnywhere)
-	float ShellEjectionImpulse;
+	float ShellEjectionImpulse = 10.f;;
 
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ShellSound;
 
 	UPROPERTY(EditAnywhere)
-	float ShellLifeSpan;
+	float ShellLifeSpan = 3.f;;
 };

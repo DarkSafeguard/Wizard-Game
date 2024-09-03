@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Weapon.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
+
 #include "Flag.generated.h"
 
 /**
@@ -29,6 +31,13 @@ private:
 	UStaticMeshComponent* FlagMesh;
 
 	FTransform InitialTransform;
+
+	UPhysicsConstraintComponent* PhysicsConstraint;
+
+	void LockRotation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastResetFlag();
 
 public:
 	FORCEINLINE FTransform GetInitialTransform() const { return InitialTransform; }
