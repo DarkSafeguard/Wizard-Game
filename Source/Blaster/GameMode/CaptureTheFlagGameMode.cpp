@@ -28,3 +28,4 @@ void ACaptureTheFlagGameMode::FlagCaptured(AFlag* Flag, AFlagZone* Zone)
 	}
 
 }
+

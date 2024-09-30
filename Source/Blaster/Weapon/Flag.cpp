@@ -30,6 +30,7 @@ void AFlag::Dropped()
 	SetOwner(nullptr);
 	BlasterOwnerCharacter = nullptr;
 	BlasterOwnerController = nullptr;
+
 }
 
 void AFlag::ResetFlag() 
@@ -93,6 +94,10 @@ void AFlag::OnDropped()
 	FlagMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_BLUE);
 	FlagMesh->MarkRenderStateDirty();
 	EnableCustomDepth(true);
+
+
+	//Add Timer to resetflag if dropped for too long
+	//cancel timer if picked up
 }
 
 void AFlag::BeginPlay()

@@ -135,7 +135,7 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 	}
 }
 
-void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController* ElimmedController)
+void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController* ElimmedController, TArray<AActor*> PlayerRespawns)
 {
 	if (ElimmedCharacter)
 	{
@@ -144,10 +144,11 @@ void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController*
 	}
 	if (ElimmedController)
 	{
-		TArray<AActor*> PlayerStarts;
-		UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerStarts);
-		int32 Selection = FMath::RandRange(0, PlayerStarts.Num() - 1);
-		RestartPlayerAtPlayerStart(ElimmedController, PlayerStarts[Selection]);
+		UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerRespawns);
+		int32 Selection = FMath::RandRange(0, PlayerRespawns.Num() - 1);
+
+		//Pick respawn from respective team
+		RestartPlayerAtPlayerStart(ElimmedController, PlayerRespawns[Selection]);
 	}
 }
 

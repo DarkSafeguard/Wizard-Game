@@ -18,4 +18,5 @@ public:
 	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttacherController) override;
 
 	void FlagCaptured(class AFlag* Flag, class AFlagZone* Zone);
+
 };

@@ -271,9 +271,9 @@ void ABlasterCharacter::MulticastElim_Implementation(bool bPlayerLeftGame)
 
 void ABlasterCharacter::ElimTimerFinished()
 {
-	BlasterGameMode = BlasterGameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : BlasterGameMode;
-	if (BlasterGameMode && !bLeftGame) {
-		BlasterGameMode->RequestRespawn(this, Controller);
+	GameMode = GameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : GameMode;
+	if (GameMode && !bLeftGame) {
+		GameMode->RequestRespawn(this, Controller, PlayerRespawns);
 	}
 	if (bLeftGame && IsLocallyControlled())
 	{
@@ -283,10 +283,10 @@ void ABlasterCharacter::ElimTimerFinished()
 
 void ABlasterCharacter::ServerLeaveGame_Implementation()
 {
-	BlasterGameMode = BlasterGameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : BlasterGameMode;
+	GameMode = GameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : GameMode;
 	BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
-	if (BlasterGameMode && BlasterPlayerState) {
-		BlasterGameMode->PlayerLeftGame(BlasterPlayerState);
+	if (GameMode && BlasterPlayerState) {
+		GameMode->PlayerLeftGame(BlasterPlayerState);
 	}
 }
 
@@ -331,8 +331,8 @@ void ABlasterCharacter::Destroyed()
 		ElimBotComponent->DestroyComponent();
 	}
 
-	BlasterGameMode = BlasterGameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : BlasterGameMode;
-	bool bMatchNotInProgress = BlasterGameMode && BlasterGameMode->GetMatchState() != MatchState::InProgress;
+	GameMode = GameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : GameMode;
+	bool bMatchNotInProgress = GameMode && GameMode->GetMatchState() != MatchState::InProgress;
 
 	if (Combat && Combat->EquippedWeapon && bMatchNotInProgress)
 	{
@@ -476,8 +476,9 @@ void ABlasterCharacter::RotateInPlace(float DeltaTime)
 
 void ABlasterCharacter::SpawnDefaultWeapon()
 {
-	BlasterGameMode = BlasterGameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : BlasterGameMode;	UWorld* World = GetWorld();
-	if (BlasterGameMode && World && !bElimmed && DefaultWeaponClass)
+	GameMode = GameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : GameMode;
+	UWorld* World = GetWorld();
+	if (GameMode && World && !bElimmed && DefaultWeaponClass)
 	{
 		AWeapon* StartingWeapon = World->SpawnActor<AWeapon>(DefaultWeaponClass);
 		StartingWeapon->bDestroyWeapon = true;
@@ -688,22 +689,39 @@ void ABlasterCharacter::OnPlayerStateInitialized()
 
 void ABlasterCharacter::SetSpawnPoint()
 {
+	TArray<AActor*> PlayerStarts;
 	if (HasAuthority() && BlasterPlayerState->GetTeam() != ETeam::ET_NoTeam)
 	{
-		TArray<AActor*> PlayerStarts;
-		UGameplayStatics::GetAllActorsOfClass(this, ATeamPlayerStart::StaticClass(), PlayerStarts);
 		TArray<ATeamPlayerStart*> TeamPlayerStarts;
+		UGameplayStatics::GetAllActorsOfClass(this, ATeamPlayerStart::StaticClass(), PlayerStarts);
+		
 		for (auto Start : PlayerStarts)
 		{
 			ATeamPlayerStart* TeamStart = Cast<ATeamPlayerStart>(Start);
 			if (TeamStart && TeamStart->Team == BlasterPlayerState->GetTeam())
 			{
 				TeamPlayerStarts.Add(TeamStart);
+				PlayerRespawns.Add(Start);
 			}
 		}
+
 		if (TeamPlayerStarts.Num() > 0)
 		{
 			ATeamPlayerStart* ChosenPlayerStart = TeamPlayerStarts[FMath::RandRange(0, TeamPlayerStarts.Num() - 1)];
+			SetActorLocationAndRotation(
+				ChosenPlayerStart->GetActorLocation(),
+				ChosenPlayerStart->GetActorRotation()
+			);
+		}
+	}
+	else if (HasAuthority() && BlasterPlayerState->GetTeam() == ETeam::ET_NoTeam)
+	{
+		UGameplayStatics::GetAllActorsOfClass(this, ATeamPlayerStart::StaticClass(), PlayerStarts);
+		PlayerRespawns = PlayerStarts;
+
+		if (PlayerStarts.Num() > 0)
+		{
+			AActor* ChosenPlayerStart = PlayerStarts[FMath::RandRange(0, PlayerStarts.Num() - 1)];
 			SetActorLocationAndRotation(
 				ChosenPlayerStart->GetActorLocation(),
 				ChosenPlayerStart->GetActorRotation()
@@ -1048,9 +1066,9 @@ void ABlasterCharacter::PlayHitReactMontage()
 
 void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
-	BlasterGameMode = BlasterGameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : BlasterGameMode;
-	if (bElimmed || BlasterGameMode == nullptr) return;
-	Damage = BlasterGameMode->CalculateDamage(InstigatorController, Controller, Damage);
+	GameMode = GameMode == nullptr ? GetWorld()->GetAuthGameMode<ABlasterGameMode>() : GameMode;
+	if (bElimmed || GameMode == nullptr) return;
+	Damage = GameMode->CalculateDamage(InstigatorController, Controller, Damage);
 
 	float DamageToHealth = Damage;
 	if (Shield > 0)
@@ -1078,11 +1096,11 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 	
 	if (Health <= 0.f)
 	{
-		if (BlasterGameMode)
+		if (GameMode)
 		{
 			BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
 			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
-			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+			GameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
 		}
 	}
 
@@ -1110,7 +1128,7 @@ FVector ABlasterCharacter::GetHitTarget() const
 	return Combat->HitTarget;
 }
 
-ECombatState ABlasterCharacter::GetCombatState() const
+ECombatState ABlasterCharacter::GetCombatState()
 {
 	if (Combat == nullptr) return ECombatState::ECS_MAX;
 	return Combat->CombatState;
@@ -1122,7 +1140,7 @@ bool ABlasterCharacter::IsLocallyReloading()
 	return Combat->bLocallyReloading;
 }
 
-bool ABlasterCharacter::IsHoldingTheFlag() const
+bool ABlasterCharacter::IsHoldingTheFlag()
 {
 	if (Combat == nullptr) return false;
 	return Combat->bHoldingTheFlag;

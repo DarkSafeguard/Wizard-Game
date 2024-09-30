@@ -10,6 +10,7 @@
 #include "Components/TimelineComponent.h"
 #include "Blaster/BlasterTypes/CombatState.h"
 #include "Blaster/BlasterTypes/Team.h"
+#include "Blaster/PlayerStart/TeamPlayerStart.h"
 
 #include "BlasterCharacter.generated.h"
 
@@ -132,6 +133,8 @@ public:
 	void MulticastLostTheLead();
 
 	void SetTeamColor(ETeam Team);
+
+	TArray<AActor*> PlayerRespawns;
 
 protected:
 	// Called when the game starts or when spawned
@@ -280,7 +283,7 @@ private:
 	*/
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
-	float MaxHealth = 50.f;
+	float MaxHealth = 100.f;
 
 	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere, Category = "Player Stats")
 	float Health = 100.f;
@@ -293,10 +296,10 @@ private:
 	*/
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
-	float MaxShield = 100.f;
+	float MaxShield = 150.f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_Shield, EditAnywhere, Category = "Player Stats")
-	float Shield = 0.f;
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
+	float Shield = 150.f;
 
 	UFUNCTION()
 	void OnRep_Shield(float LastShield);
@@ -393,7 +396,7 @@ private:
 	TSubclassOf<AWeapon> DefaultWeaponClass;
 
 	UPROPERTY()
-	class ABlasterGameMode* BlasterGameMode;
+	class ABlasterGameMode* GameMode;
 
 public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -413,7 +416,7 @@ public:
 	FORCEINLINE float GetShield()  const { return Shield; }
 	FORCEINLINE void SetShield(float Amount) { Shield = Amount; }
 	FORCEINLINE float GetMaxShield()  const { return MaxShield; }
-	FORCEINLINE ECombatState GetCombatState() const;
+	ECombatState GetCombatState();
 	FORCEINLINE UCombatComponent* GetCombat() const { return Combat; }
 	FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
 	FORCEINLINE UAnimMontage* GetReloadMontage() const { return ReloadMontage; }
@@ -421,7 +424,7 @@ public:
 	FORCEINLINE UBuffComponent* GetBuff() const { return Buff; }
 	bool IsLocallyReloading();
 	FORCEINLINE ULagCompensationComponent* GetLagCompensation() const { return LagCompensation; }
-	FORCEINLINE bool IsHoldingTheFlag() const;
+	bool IsHoldingTheFlag();
 	ETeam GetTeam();
 	void SetHoldingTheFlag(bool bHolding);
 };

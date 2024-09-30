@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+
 #include "BlasterGameMode.generated.h"
+
 
 
 namespace MatchState
@@ -27,7 +29,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
-	virtual void RequestRespawn(class ACharacter* ElimmedCharacter, AController* ElimmedController);
+	virtual void RequestRespawn(class ACharacter* ElimmedCharacter, AController* ElimmedController, TArray<AActor*> PlayerRespawns);
 	void PlayerLeftGame(class ABlasterPlayerState* PlayerLeaving);
 	virtual float CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage);
 
@@ -43,6 +45,8 @@ public:
 	float LevelStartingTime = 0.f;
 
 	bool bTeamsMatch = false;
+
+
 
 protected:
 	virtual void BeginPlay() override;

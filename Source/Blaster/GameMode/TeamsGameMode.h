@@ -22,7 +22,6 @@ public:
 	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttacherController) override;
 
 
-
 protected:
 
 	virtual void HandleMatchHasStarted() override;
