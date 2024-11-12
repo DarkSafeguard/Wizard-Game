@@ -277,7 +277,7 @@ private:
 	void OnRep_Grenades();
 
 	UPROPERTY(EditAnywhere)
-	int32 MaxGrenades = 4;
+	int32 MaxGrenades = 0;
 	void UpdateHUDGrenades();
 
 	UPROPERTY(Replicated = OnRep_HoldingTheFlag)

@@ -128,6 +128,8 @@ protected:
 	virtual void OnEquippedSecondary();
 	virtual void OnDropped();
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	UFUNCTION()
 	virtual void OnSphereOverlap(
 		UPrimitiveComponent* OverlappedComponent,
@@ -215,6 +217,13 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	ETeam Team;
+
+	FTimerHandle DestroyDroppedTimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Timer")
+	float DestroyTime = 5.0f;
+
+	void DestroyWeapon();
 
 public:	
 	void SetWeaponState(EWeaponState State);

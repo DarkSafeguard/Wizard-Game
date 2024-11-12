@@ -343,6 +343,37 @@ void AWeapon::Dropped()
 	SetOwner(nullptr);
 	BlasterOwnerCharacter = nullptr;
 	BlasterOwnerController = nullptr;
+
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+			DestroyDroppedTimerHandle,
+			this,
+			&AWeapon::DestroyWeapon,
+			DestroyTime,
+			false
+		);
+	}
+}
+
+void AWeapon::DestroyWeapon()
+{
+
+	if (!IsPendingKill() && WeaponState == EWeaponState::EWS_Dropped)  // Ensure the actor is not already being destroyed
+	{
+		Super::Destroy();
+	}
+	
+}
+
+void AWeapon::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (DestroyDroppedTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(DestroyDroppedTimerHandle);
+	}
 }
 
 bool AWeapon::IsEmpty()
