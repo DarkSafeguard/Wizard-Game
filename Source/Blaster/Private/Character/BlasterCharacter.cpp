@@ -682,7 +682,7 @@ void ABlasterCharacter::PollInit()
 void ABlasterCharacter::OnPlayerStateInitialized()
 {
 	BlasterPlayerState->AddToScore(0.f);
-	BlasterPlayerState->AddToDefeats(0);
+	BlasterPlayerState->AddToDefeats(0.f);
 	SetTeamColor(BlasterPlayerState->GetTeam());
 	SetSpawnPoint();
 }
@@ -846,7 +846,7 @@ void ABlasterCharacter::OnRep_Health(float LastHealth)
 void ABlasterCharacter::OnRep_Shield(float LastShield)
 {
 	UpdateHUDShield();
-	if (Health < LastShield)
+	if (Shield < LastShield)
 	{
 		PlayHitReactMontage();
 	}
