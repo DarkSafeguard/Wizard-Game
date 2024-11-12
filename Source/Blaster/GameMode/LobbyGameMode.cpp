@@ -27,18 +27,22 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 				FString MatchType = Subsystem->DesiredMatchType;
 				if (MatchType == "FreeForAll")
 				{
-					World->ServerTravel(FString("/Game/Maps/BlasterMap?listen"));
+					World->ServerTravel(FString("/Game/Maps/GameplayMaps/MadLab_FFA?listen"));
 
 				}
 				else if (MatchType == "Teams")
 				{
-					World->ServerTravel(FString("/Game/Maps/TeamsMap?listen"));
+					World->ServerTravel(FString("/Game/Maps/GameplayMaps/Teams?listen"));
 
 				}
 				else if (MatchType == "CaptureTheFlag")
 				{
-					World->ServerTravel(FString("/Game/Maps/CaptureTheFlagMap?listen"));
+					World->ServerTravel(FString("/Game/Maps/GameplayMaps/CastleClash_CTF?listen"));
 
+				}
+				else
+				{
+					World->ServerTravel(FString("/Game/Maps/GameplayMaps/MadLab_FFA?listen"));
 				}
 			}
 		}
