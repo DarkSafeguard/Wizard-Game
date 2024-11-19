@@ -33,14 +33,14 @@ public:
 	void InitTeamScores();
 	void SetHUDRedTeamScore(int32 RedScore);
 	void SetHUDBlueTeamScore(int32 BlueScore);
-
+	/*
 	//Fix for Client SeamlessTravel
 	virtual void NotifyLoadedWorld(FName WorldPackageName, bool bFinalDest) override;
 
 	UFUNCTION(Reliable, Server, WithValidation, SealedEvent)
 	void ServerNotifyLoadedWorldWorkaround(FName WorldPackageName);
 	//End fix
-
+	*/
 	virtual float GetServerTime(); //Synced with server world clock
 	virtual void ReceivedPlayer() override; //Sync with server clock as soon as possible
 
