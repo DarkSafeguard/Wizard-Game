@@ -2,25 +2,25 @@
 
 
 #include "BlasterPlayerController.h"
-#include "Blaster/HUD/BlasterHUD.h"
-#include "Blaster/HUD/CharacterOverlay.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
+#include "Components/InputComponent.h"
+#include "Blaster/HUD/BlasterHUD.h"
+#include "Blaster/HUD/CharacterOverlay.h"
+#include "Blaster/HUD/Announcement.h"
+#include "Blaster/HUD/ReturnToMainMenu.h"
 #include "Blaster/Public/Character/BlasterCharacter.h"
+#include "Blaster/GameMode/BlasterGameMode.h"
+#include "Blaster/BlasterComponents/CombatComponent.h"
+#include "Blaster/GameState/BlasterGameState.h"
+#include "Blaster/PlayerState/BlasterPlayerState.h"
+#include "Blaster/BlasterTypes/Announcement.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameMapsSettings.h"
-#include "Blaster/GameMode/BlasterGameMode.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blaster/BlasterComponents/CombatComponent.h"
-#include "Blaster/HUD/Announcement.h"
-#include "Blaster/GameState/BlasterGameState.h"
-#include "Blaster/PlayerState/BlasterPlayerState.h"
-#include "Components/Image.h"
-#include "Blaster/HUD/ReturnToMainMenu.h"
-#include "Blaster/BlasterTypes/Announcement.h"
 
-#include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
@@ -138,7 +138,7 @@ void ABlasterPlayerController::SetHUDBlueTeamScore(int32 BlueScore)
 		BlasterHUD->CharacterOverlay->BlueTeamScore->SetText(FText::FromString(ScoreText));
 	}
 }
- 
+
 void ABlasterPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
