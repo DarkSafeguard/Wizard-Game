@@ -82,5 +82,6 @@ private:
 	bool bCreateSessionOnDestroy{ false };
 	int32 LastNumPublicConnections;
 	FString LastMatchType;
-
+	bool bFindSessionOnDestroy{ false };
+	int32 LastMaxSearchResults;
 };

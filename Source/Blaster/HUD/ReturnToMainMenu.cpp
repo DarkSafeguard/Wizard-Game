@@ -68,6 +68,15 @@ void UReturnToMainMenu::OnDestroySession(bool bWasSuccessful)
 		if (GameMode)
 		{
 			GameMode->ReturnToMainMenuHost();
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(
+					-1,
+					15.f,
+					FColor::Yellow,
+					FString(TEXT("Host returned to menu"))
+				);
+			}
 		}
 		else
 		{
@@ -75,6 +84,15 @@ void UReturnToMainMenu::OnDestroySession(bool bWasSuccessful)
 			if (PlayerController)
 			{
 				PlayerController->ClientReturnToMainMenuWithTextReason(FText());
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(
+						-1,
+						15.f,
+						FColor::Yellow,
+						FString(TEXT("Client returned to menu"))
+					);
+				}
 			}
 		}
 	}

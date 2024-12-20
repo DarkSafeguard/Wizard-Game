@@ -78,16 +78,6 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(
-				-1,
-				15.f,
-				FColor::Yellow,
-				FString(TEXT("Session created successfully"))
-			);
-		}
-
 		UWorld* World = GetWorld();
 		if (World)
 		{
@@ -113,6 +103,7 @@ void UMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SessionResu
 {
 	if (MultiplayerSessionsSubsystem == nullptr)
 	{
+		JoinButton->SetIsEnabled(true);
 		return;
 	}
 	
@@ -123,10 +114,16 @@ void UMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SessionResu
 		if (SettingsValue == MatchType)
 		{
 			MultiplayerSessionsSubsystem->JoinSession(Result);
+			MatchFound = true;
 			return;
 		}
+		else
+		{
+			MatchFound = false;
+		}
+
 	}
-	if (!bWasSuccessful || SessionResults.Num() == 0)
+	if (!bWasSuccessful || SessionResults.Num() == 0 || !MatchFound)
 	{
 		JoinButton->SetIsEnabled(true);
 	}
